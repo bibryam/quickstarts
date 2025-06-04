@@ -128,70 +128,74 @@ dotnet build
 dapr run --app-id job-service-sdk --app-port 6200 --dapr-http-port 6280 -- dotnet run
 ```
 
-2. In a new terminal window, schedule the `R2-D2` Job using the Jobs API.
+2. In a new terminal window, schedule the `R2-D2` Job using the Dapr Jobs API. The job name is part of the URL.
 
 ```bash
 curl -X POST \
-  http://localhost:6200/scheduleJob \
+  http://localhost:6280/v1.0-alpha1/jobs/r2-d2 \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "R2-D2",
-    "job": "Oil Change",
-    "dueTime": 2
-  }'
+        "data": {
+          "@type": "type.googleapis.com/google.protobuf.StringValue",
+          "value": "R2-D2:Oil Change"
+        },
+        "dueTime": "2s"
+    }'
 ```
 
-In the `job-service` terminal window, the output should be:
+In the `job-service` terminal window, the output should be similar to (the exact "Received job request" might change as the app is now a direct job handler):
 
 ```text
-== APP - job-app == Received job request...
-== APP - job-app == Starting droid: R2-D2
-== APP - job-app == Executing maintenance job: Oil Change
+== APP - job-service-sdk == Job Scheduled: R2-D2
+== APP - job-service-sdk == Starting droid: R2-D2
+== APP - job-service-sdk == Executing maintenance job: Oil Change
 ```
 
-3. On the same terminal window, schedule the `C-3PO` Job using the Jobs API.
+3. On the same terminal window, schedule the `C-3PO` Job using the Dapr Jobs API.
 
 ```bash
 curl -X POST \
-  http://localhost:6200/scheduleJob \
+  http://localhost:6280/v1.0-alpha1/jobs/c-3po \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "C-3PO",
-    "job": "Limb Calibration",
-    "dueTime": 30
-  }'
+        "data": {
+          "@type": "type.googleapis.com/google.protobuf.StringValue",
+          "value": "C-3PO:Limb Calibration"
+        },
+        "dueTime": "30s"
+    }'
 ```
 
 ### Get a scheduled job
 
-1. On the same terminal window, run the command below to get the recently scheduled `C-3PO` job.
+1. On the same terminal window, run the command below to get the recently scheduled `C-3PO` job via the Dapr Jobs API.
 
 ```bash
-curl -X GET http://localhost:6200/getJob/C-3PO -H "Content-Type: application/json" 
+curl -X GET http://localhost:6280/v1.0-alpha1/jobs/C-3PO
 ```
 
-You should see the following:
+You should see the following (the exact structure might vary slightly based on Dapr API response for jobs):
 
 ```text
-{"name":"c-3po", "dueTime":"30s", "data":{"@type":"type.googleapis.com/google.protobuf.Value", "value":{"Value":"C-3PO:Limb Calibration"}}}
+{"jobId":"C-3PO", "schedule":null, "dueTime":"30s", "ttl":null, "data":{"@type":"type.googleapis.com/google.protobuf.StringValue","value":"C-3PO:Limb Calibration"},"repeatCount":0}
 ```
 
 ### Delete a scheduled job
 
-1. On the same terminal window, run the command below to deleted the recently scheduled `C-3PO` job.
+1. On the same terminal window, run the command below to delete the recently scheduled `C-3PO` job via the Dapr Jobs API.
 
 ```bash
-curl -X DELETE http://localhost:6200/deleteJob/C-3PO -H "Content-Type: application/json" 
+curl -X DELETE http://localhost:6280/v1.0-alpha1/jobs/C-3PO
 ```
 
-2. Run the command below to attempt to retrieve the deleted job:
+2. Run the command below to attempt to retrieve the deleted job via the Dapr Jobs API:
 
 ```bash
-curl -X GET http://localhost:6200/getJob/C-3PO -H "Content-Type: application/json"
+curl -X GET http://localhost:6280/v1.0-alpha1/jobs/C-3PO
 ```
 
 In the `job-service` terminal window, the output should be similar to the following:
 
 ```text
-ERRO[0157] Error getting job C-3PO due to: rpc error: code = NotFound desc = job not found: C-3PO  instance=local scope=dapr.api type=log ver=1.15.0
+ERRO[0157] Error getting job C-3PO due to: rpc error: code = NotFound desc = job not found: C-3PO  instance=local scope=dapr.api type=log ver=1.x.x
 ```

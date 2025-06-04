@@ -189,5 +189,5 @@ curl -X GET http://localhost:6280/v1.0-alpha1/jobs/c-3po -H "Content-Type: appli
 In the `job-service` terminal window, the output should be similar to the following:
 
 ```text
-ERRO[0568] Error getting job c-3po due to: rpc error: code = Unknown desc = job not found: c-3po instance=local scope=dapr.api type=log ver=1.15.0
+ERRO[0157] Error getting job C-3PO due to: rpc error: code = NotFound desc = job not found: C-3PO  instance=local scope=dapr.api type=log ver=1.x.x
 ```

@@ -74,7 +74,7 @@ dapr stop -f .
 
 <!-- END_STEP -->
 
-## Run the app with the Dapr CLI
+## Run the app individually
 
 1. Install dependencies:
 

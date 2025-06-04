@@ -15,7 +15,9 @@ This quickstart includes two apps:
 
 This section shows how to run both applications at once using [multi-app run template files](https://docs.dapr.io/developing-applications/local-development/multi-app-dapr-run/multi-app-overview/) with `dapr run -f .`.  This enables to you test the interactions between multiple applications and will `schedule`, `run`, `get`, and `delete` jobs within a single process.
 
-Open a new terminal window and run the multi app run template:
+Ensure Go modules are tidy (`go mod tidy` in both `./job-scheduler-http` and `./job-service-http` subdirectories if running for the first time or after code changes). The `dapr.yaml` file uses `go run .` for each app, which handles compilation.
+
+Open a new terminal window and run the multi app run template (from the `jobs/go/http` directory):
 
 <!-- STEP
 name: Run multi app run template
@@ -50,7 +52,7 @@ The terminal console output should look similar to this, where:
 == APP - job-service-http == Starting droid: R2-D2
 == APP - job-service-http == Executing maintenance job: Oil Change
 == APP - job-scheduler-http == Job Scheduled: C-3PO
-== APP - job-scheduler-http == Job details: {"name":"C-3PO", "dueTime":"30s", "data":{"@type":"ttype.googleapis.com/google.protobuf.StringValue", "expression":"C-3PO:Limb Calibration"}}
+== APP - job-scheduler-http == Job details: {"name":"C-3PO", "dueTime":"30s", "data":{"@type":"type.googleapis.com/google.protobuf.StringValue", "expression":"C-3PO:Limb Calibration"}}
 ```
 
 After 30 seconds, the terminal output should present the `C-3PO` job being processed:
@@ -80,8 +82,19 @@ dapr stop -f .
 
 ### Schedule Jobs
 
-1. Open a terminal and run the `job-service` app:
-
+1. Open a terminal, navigate to the `job-service-http` directory (e.g., `cd ./job-service-http`), and run the `job-service` app with Dapr:
+<!-- STEP
+name: Run job-service-http individually
+working_dir: ./job-service-http
+expected_stdout_lines:
+  - "Registered job handler for: R2D2" # Assuming some registration log
+  - "Registered job handler for: c-3po"
+expected_stderr_lines:
+output_match_mode: substring
+match_order: none
+background: true
+sleep: 5
+-->
 ```bash
 dapr run --app-id job-service-http --app-port 6200 --dapr-http-port 6280 -- go run .
 ```
@@ -135,7 +148,7 @@ curl -X GET http://localhost:6280/v1.0-alpha1/jobs/c-3po -H "Content-Type: appli
 You should see the following:
 
 ```text
-{"name":"C-3PO", "dueTime":"30s", "data":{"@type":"type.googleapis.com/google.protobuf.StringValue", "expression":"C-3PO:Limb Calibration"}}
+{"name":"c-3po", "dueTime":"30s", "data":{"@type":"type.googleapis.com/google.protobuf.Value", "value":{"Value":"C-3PO:Limb Calibration"}}}
 ```
 
 ### Delete a scheduled job
@@ -155,5 +168,5 @@ curl -X GET http://localhost:6280/v1.0-alpha1/jobs/c-3po -H "Content-Type: appli
 Back at the `job-service` app terminal window, the output should be:
 
 ```text
-ERRO[0249] Error getting job c-3po due to: rpc error: code = Unknown desc = job not found: app||default||job-service-http||c-3po  instance=diagrid.local scope=dapr.api type=log ver=1.14.0-rc.2
+ERRO[0249] Error getting job c-3po due to: rpc error: code = Unknown desc = job not found: app||default||job-service-http||c-3po  instance=diagrid.local scope=dapr.api type=log ver=1.x.x
 ```

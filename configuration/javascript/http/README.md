@@ -31,20 +31,20 @@ docker exec dapr_redis redis-cli MSET orderId1 "101" orderId2 "102"
 
 ## Run order-processor
 
-1. Navigate to folder and install dependencies:
+1. Navigate to the `order-processor` directory and install dependencies:
 
 <!-- STEP
 name: Install Node dependencies
+working_dir: ./order-processor
 -->
 
 ```bash
-cd ./order-processor
 npm install
 ```
 
 <!-- END_STEP -->
 
-1. Run the Node app with Dapr:
+2. Run the Node app with Dapr:
 
 <!-- STEP
 name: Run order-processor service
@@ -60,7 +60,6 @@ sleep: 120
 -->
 
 ```bash
-cd ./order-processor
 dapr run --app-id order-processor --resources-path ../../../components/ --app-port 6001 -- node index.js
 ```
 

@@ -16,20 +16,19 @@ This section shows how to run the application using the [multi-app run template 
 
 This example uses the default LLM Component provided by Dapr which simply echoes the input provided, for testing purposes. Here are other [supported Conversation components](https://docs.dapr.io/reference/components-reference/supported-conversation/).
 
-1. Install dependencies:
+1. Install dependencies for the `conversation` app (this command can be run from the current directory `conversation/javascript/http/`):
 
 <!-- STEP
 name: Install Node dependencies for conversation
 -->
 
 ```bash
-cd ./conversation
-npm install
+npm install --prefix ./conversation
 ```
 
 <!-- END_STEP -->
 
-2. Open a new terminal window and run the multi app run template:
+2. From the current directory (`conversation/javascript/http/`), open a new terminal window and run the multi app run template:
 
 <!-- STEP
 name: Run multi app run template

@@ -1,6 +1,6 @@
 # Dapr Bindings (Dapr SDK)
 
-In this quickstart, you'll create a microservice to demonstrate Dapr's bindings API to work with external systems as inputs and outputs. The service listens to input binding events from a system CRON and then outputs the contents of local data to a PostgreSql output binding. 
+In this quickstart, you'll create a microservice to demonstrate Dapr's bindings API to work with external systems as inputs and outputs. The service listens to input binding events from a system CRON and then outputs the contents of local data to a PostgreSQL output binding.
 
 Visit [this](https://docs.dapr.io/developing-applications/building-blocks/bindings/) link for more information about Dapr and Bindings.
 
@@ -8,11 +8,11 @@ Visit [this](https://docs.dapr.io/developing-applications/building-blocks/bindin
 
 This quickstart includes one service:
  
-- Javascript/Node.js service `bindings`
+- JavaScript/Node.js service `bindings`
 
 ### Run and initialize PostgreSQL container
 
-1. Open a new terminal, change directories to `../../db`, and run the container with [Docker Compose](https://docs.docker.com/compose/): 
+1. Open a new terminal, navigate to the `bindings/db` directory relative to the quickstarts root (`cd ../../db` if in a language/app folder like `bindings/csharp/sdk/batch`, or `../../../db` if in `bindings/csharp/sdk`), and run the container with [Docker Compose](https://docs.docker.com/compose/):
 
 <!-- STEP
 name: Run and initialize PostgreSQL container
@@ -23,27 +23,26 @@ timeout_seconds: 120
 -->
 
 ```bash
-cd ../../db
+# Ensure you are in the 'bindings/db' directory from the quickstart root
 docker compose up
 ```
 
 <!-- END_STEP -->
 
-### Run Javascript service with Dapr
+### Run JavaScript service with Dapr
 
-2. Open a new terminal window, change directories to `./batch` in the quickstart directory and run: 
+2. Open a new terminal window, navigate to the `./batch` directory (e.g., `cd ./batch`) and run:
 
 <!-- STEP
-name: Install Javascript dependencies
+name: Install JavaScript dependencies
 -->
 
 ```bash
-cd ./batch
 npm install
 ```
 
 <!-- END_STEP -->
-3. Run the Javascript service app with Dapr: 
+3. Run the JavaScript service app with Dapr:
 
 <!-- STEP
 name: Run batch-sdk service

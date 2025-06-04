@@ -61,15 +61,22 @@ dapr stop -f .
 
 ## Run the app individually
 
-1. Open a terminal and run the `conversation` app. Build the dependencies if you haven't already.
+1. Navigate to the `./conversation` directory and build the application:
 
+<!-- STEP
+name: Build conversation app
+working_dir: ./conversation
+-->
 ```bash
-cd ./conversation
 dotnet build
 ```
 
-2. Run the Dapr process alongside the application.
+2. Still in the `./conversation` directory, run the Dapr process alongside the application:
 
+<!-- STEP
+name: Run conversation app
+working_dir: ./conversation
+-->
 ```bash
 dapr run --app-id conversation --resources-path ../../../components/ -- dotnet run
 ```

@@ -93,7 +93,7 @@ dapr run --app-id actorclient -- dotnet run
 Expected output:
 
 ```bash
-== APP == Startup up...
+== APP == Starting up...
 == APP == Calling SetDataAsync on SmokeDetectorActor:1...
 == APP == Got response: Success
 == APP == Calling GetDataAsync on SmokeDetectorActor:1...
@@ -148,7 +148,7 @@ Looking at the code, `SmartDetectorActor` objects are created in the client appl
         var smokeDetectorActorType = "SmokeDetectorActor";
         var controllerActorType = "ControllerActor";
 
-        Console.WriteLine("Startup up...");
+        Console.WriteLine("Starting up...");
 
         // An ActorId uniquely identifies an actor instance
         var deviceActorId1 = new ActorId(deviceId1);

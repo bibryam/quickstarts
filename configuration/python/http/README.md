@@ -34,10 +34,10 @@ docker exec dapr_redis redis-cli MSET orderId1 "101" orderId2 "102"
 
 <!-- STEP
 name: Install python dependencies
+working_dir: ./order-processor
 -->
 
 ```bash
-cd ./order-processor
 pip3 install -r requirements.txt
 ```
 
@@ -57,7 +57,6 @@ sleep: 15
 -->
 
 ```bash
-cd ./order-processor
 dapr run --app-id order-processor --resources-path ../../../components/ --app-port 6001 -- python3 app.py
 ```
 

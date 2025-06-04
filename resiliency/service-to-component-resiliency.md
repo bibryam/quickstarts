@@ -1,4 +1,4 @@
-# Dapr Resiliency: State Managment
+# Dapr Resiliency: State Management
 
 In this QuickStart, you will run a microservice application that continuously persists and retrieves state via Dapr's state management API. When operations to the state store begin to fail, Dapr resiliency policies are applied.
 
@@ -12,7 +12,9 @@ This quickstart includes one service:
 
 ### Run the client service with Dapr and resiliency enabled
 
-1. Navigate to the app directory, install dependencies, and run the service with resiliency:
+1. Navigate to the app directory, install dependencies, and run the service with resiliency.
+
+Note: Dapr loads components from all specified resource paths. Here, we're loading the application's standard state store component (from the `state_management` quickstart's `resources` directory) and the `resiliency.yaml` spec (from the `resiliency` quickstart's `components` directory) which applies policies to it. The `resiliency.yaml` is located at `quickstarts/resiliency/components/resiliency.yaml`.
 
 ### C# example:
 
@@ -20,7 +22,13 @@ This quickstart includes one service:
 cd ../state_management/csharp/sdk/order-processor
 dotnet restore
 dotnet build
-dapr run --app-id order-processor --resources-path ../../../resources/ -- dotnet run
+# The paths assume execution from state_management/csharp/sdk/order-processor:
+# ../../../resources/ points to state_management/resources/
+# ../../../../resiliency/components/ points to resiliency/components/
+dapr run --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  -- dotnet run
 ```
 
 ### Go example:
@@ -28,7 +36,11 @@ dapr run --app-id order-processor --resources-path ../../../resources/ -- dotnet
 ```bash
 cd ../state_management/go/sdk/order-processor
 go build .
-dapr run --app-id order-processor --resources-path ../../../resources -- go run .
+# The paths assume execution from state_management/go/sdk/order-processor:
+dapr run --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  -- go run .
 ```
 
 ### Java example:
@@ -36,7 +48,11 @@ dapr run --app-id order-processor --resources-path ../../../resources -- go run 
 ```bash
 cd ../state_management/java/sdk/order-processor
 mvn clean install
-dapr run --app-id order-processor --resources-path ../../../resources/ -- java -jar target/OrderProcessingService-0.0.1-SNAPSHOT.jar
+# The paths assume execution from state_management/java/sdk/order-processor:
+dapr run --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  -- java -jar target/OrderProcessingService-0.0.1-SNAPSHOT.jar
 ```
 
 ### JavaScript example:
@@ -44,7 +60,11 @@ dapr run --app-id order-processor --resources-path ../../../resources/ -- java -
 ```bash
 cd ../state_management/javascript/sdk/order-processor
 npm install
-dapr run --app-id order-processor  --resources-path ../../../resources/ -- npm start
+# The paths assume execution from state_management/javascript/sdk/order-processor:
+dapr run --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  -- npm start
 ```
 
 ### Python example:
@@ -52,7 +72,11 @@ dapr run --app-id order-processor  --resources-path ../../../resources/ -- npm s
 ```bash
 cd ../state_management/python/sdk/order-processor
 pip3 install -r requirements.txt
-dapr run --app-id order-processor  --resources-path ../../../resources/ -- python3
+# The paths assume execution from state_management/python/sdk/order-processor:
+dapr run --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  -- python3 app.py
 ```
 
 ### Expected output:

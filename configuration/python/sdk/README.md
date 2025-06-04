@@ -33,10 +33,10 @@ docker exec dapr_redis redis-cli MSET orderId1 "101" orderId2 "102"
 
 <!-- STEP
 name: Install python dependencies
+working_dir: ./order-processor
 -->
 
 ```bash
-cd ./order-processor
 pip3 install -r requirements.txt
 ```
 
@@ -47,7 +47,7 @@ pip3 install -r requirements.txt
 <!-- STEP
 name: Run order-processor service
 expected_stdout_lines:
-  - '== APP == Configuration for orderId2 : 102'
+  - "== APP == Fetched configuration for orderId2: '102'"
   - '== APP == Subscription ID is'
 expected_stderr_lines:
 output_match_mode: substring
@@ -56,7 +56,6 @@ sleep: 15
 -->
 
 ```bash
-cd ./order-processor
 dapr run --app-id order-processor --resources-path ../../../components/ --app-port 6001 -- python3 app.py
 ```
 

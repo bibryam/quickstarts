@@ -15,15 +15,21 @@ This quickstart includes two apps:
 
 This section shows how to run both applications at once using [multi-app run template files](https://docs.dapr.io/developing-applications/local-development/multi-app-dapr-run/multi-app-overview/) with `dapr run -f .`.  This enables to you test the interactions between multiple applications and will `schedule`, `run`, `get`, and `delete` jobs within a single process.
 
-Open a new terminal window and run the multi app run template:
+Ensure Go modules are tidy (run `go mod tidy` in both `./job-scheduler-sdk` and `./job-service-sdk` subdirectories if running for the first time or after code changes). The `dapr.yaml` file uses `go run .` for each app, which handles compilation.
+
+Open a new terminal window and run the multi app run template (from the `jobs/go/sdk` directory):
 
 <!-- STEP
  name: Run multi app run template
  expected_stdout_lines:
-   - '== APP - job-service-sdk == Starting droid: R2-D2'
-   - '== APP - job-service-sdk == Executing maintenance job: Oil Change'
-   - '== APP - job-service-sdk == Starting droid: C-3PO'
-   - '== APP - job-service-sdk == Executing maintenance job: Memory Wipe'
+  - '== APP - job-service-sdk == Registered job handler for:  R2-D2'
+  - '== APP - job-service-sdk == Job scheduled:  R2-D2'
+  - '== APP - job-scheduler-sdk == Get job response:  {"droid":"C-3PO","Task":"Memory Wipe"}'
+  - '== APP - job-scheduler-sdk == Deleted job:  BB-8'
+  - '== APP - job-service-sdk == Starting droid: R2-D2'
+  - '== APP - job-service-sdk == Executing maintenance job: Oil Change'
+  - '== APP - job-service-sdk == Starting droid: C-3PO'
+  - '== APP - job-service-sdk == Executing maintenance job: Memory Wipe'
  expected_stderr_lines:
  output_match_mode: substring
  match_order: none
@@ -96,8 +102,21 @@ dapr stop -f .
 
 ### Schedule Jobs
 
-1. Open a terminal and run the `job-service` app:
-
+1. Open a terminal, navigate to the `job-service-sdk` directory (e.g., `cd ./job-service-sdk`), and run the `job-service` app with Dapr:
+<!-- STEP
+name: Run job-service-sdk individually
+working_dir: ./job-service-sdk
+expected_stdout_lines:
+  - "Registered job handler for: R2-D2"
+  - "Registered job handler for: C-3PO"
+  - "Registered job handler for: BB-8"
+  - "Starting server on port: 6400" # Or similar
+expected_stderr_lines:
+output_match_mode: substring
+match_order: none
+background: true
+sleep: 5
+-->
 ```bash
 dapr run --app-id job-service-sdk --app-port 6400 --dapr-grpc-port 6481 --app-protocol grpc -- go run .
 ```
@@ -112,8 +131,20 @@ The output should be:
 == APP == Starting server on port: 6400
 ```
 
-2. On a new terminal window, run the `job-scheduler` app:
-
+2. On a new terminal window, navigate to the `job-scheduler-sdk` directory (e.g., `cd ./job-scheduler-sdk`), and run the `job-scheduler` app with Dapr:
+<!-- STEP
+name: Run job-scheduler-sdk individually
+working_dir: ./job-scheduler-sdk
+expected_stdout_lines:
+  - "Get job response: {\"droid\":\"C-3PO\",\"Task\":\"Memory Wipe\"}" # Example, adjust based on actual logs
+  - "Get job response: {\"droid\":\"BB-8\",\"Task\":\"Internal Gyroscope Check\"}"
+  - "Job deleted: BB-8"
+expected_stderr_lines:
+output_match_mode: substring
+match_order: none
+background: true
+sleep: 5
+-->
 ```bash
 dapr run --app-id job-scheduler-sdk --app-port 6500 -- go run .
 ```

@@ -12,7 +12,9 @@ This quickstart includes one service:
 
 ### Run both services with Dapr and resiliency enabled
 
-1. Open two terminal windows. In one terminal window, navigate to the `checkout` service. In the other terminal window, navigate to the `order-processor` service. Install dependencies for each service and run both services with resiliency enabled:
+1. Open two terminal windows. In one terminal window, navigate to the `checkout` service. In the other terminal window, navigate to the `order-processor` service. Install dependencies for each service and run both services with resiliency enabled.
+
+Note: Dapr loads components and resiliency specs from all specified resource paths. Here, we're loading any application-specific components (e.g., from the `service_invocation` quickstart's `resources` directory) and the `resiliency.yaml` spec (from the `resiliency` quickstart's `components` directory). The `resiliency.yaml` is located at `quickstarts/resiliency/components/resiliency.yaml`.
 
 ### C# example
 
@@ -22,7 +24,11 @@ This quickstart includes one service:
 cd ../service_invocation/csharp/http/order-processor
 dotnet restore
 dotnet build
-dapr run --app-port 7001 --app-id order-processor --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3501 -- dotnet run
+# The paths assume execution from service_invocation/csharp/http/order-processor:
+dapr run --app-port 7001 --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3501 -- dotnet run
 ```
 
 ##### Checkout Service:
@@ -30,7 +36,11 @@ dapr run --app-port 7001 --app-id order-processor --resources-path ../../../reso
 cd ../service_invocation/csharp/http/checkout
 dotnet restore
 dotnet build
-dapr run  --app-id checkout --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3500 -- dotnet run
+# The paths assume execution from service_invocation/csharp/http/checkout:
+dapr run  --app-id checkout \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3500 -- dotnet run
 ```
 
 ### Go example
@@ -40,14 +50,22 @@ dapr run  --app-id checkout --resources-path ../../../resources/ --app-protocol 
 ```bash
 cd ../service_invocation/go/http/order-processor
 go build .
-dapr run --app-port 6001 --app-id order-processor --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3501 -- go run .
+# The paths assume execution from service_invocation/go/http/order-processor:
+dapr run --app-port 6001 --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3501 -- go run .
 ```
 
 ##### Checkout Service:
 ```bash
 cd ../service_invocation/go/http/checkout
 go build .
-dapr run  --app-id checkout --resources-path ../../../resources/  --app-protocol http --dapr-http-port 3500 -- go run .
+# The paths assume execution from service_invocation/go/http/checkout:
+dapr run  --app-id checkout \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3500 -- go run .
 ```
 
 ### Java example
@@ -57,7 +75,11 @@ dapr run  --app-id checkout --resources-path ../../../resources/  --app-protocol
 ```bash
 cd ../service_invocation/java/http/order-processor
 mvn clean install
-dapr run --app-id order-processor --resources-path ../../../resources/ --app-port 9001 --app-protocol http --dapr-http-port 3501 -- java -jar target/OrderProcessingService-0.0.1-SNAPSHOT.jar
+# The paths assume execution from service_invocation/java/http/order-processor:
+dapr run --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-port 9001 --app-protocol http --dapr-http-port 3501 -- java -jar target/OrderProcessingService-0.0.1-SNAPSHOT.jar
 ```
 
 ##### Checkout Service
@@ -65,7 +87,11 @@ dapr run --app-id order-processor --resources-path ../../../resources/ --app-por
 ```bash
 cd ../service_invocation/java/http/checkout
 mvn clean install
-dapr run --app-id checkout --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3500 -- java -jar target/CheckoutService-0.0.1-SNAPSHOT.jar
+# The paths assume execution from service_invocation/java/http/checkout:
+dapr run --app-id checkout \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3500 -- java -jar target/CheckoutService-0.0.1-SNAPSHOT.jar
 ```
 
 ### JavaScript example
@@ -75,7 +101,11 @@ dapr run --app-id checkout --resources-path ../../../resources/ --app-protocol h
 ```bash
 cd ../service_invocation/javascript/http/order-processor
 npm install
-dapr run --app-port 5001 --app-id order-processor --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3501 -- npm start
+# The paths assume execution from service_invocation/javascript/http/order-processor:
+dapr run --app-port 5001 --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3501 -- npm start
 ```
 
 ##### Checkout Service
@@ -83,7 +113,11 @@ dapr run --app-port 5001 --app-id order-processor --resources-path ../../../reso
 ```bash
 cd ../service_invocation/javascript/http/checkout
 npm install
-dapr run  --app-id checkout --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3500 -- npm start
+# The paths assume execution from service_invocation/javascript/http/checkout:
+dapr run  --app-id checkout \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3500 -- npm start
 ```
 
 ### Python example
@@ -93,7 +127,11 @@ dapr run  --app-id checkout --resources-path ../../../resources/ --app-protocol 
 ```bash
 cd ../service_invocation/python/http/order-processor
 pip3 install -r requirements.txt
-dapr run --app-port 8001 --app-id order-processor --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3501 -- python3 app.py
+# The paths assume execution from service_invocation/python/http/order-processor:
+dapr run --app-port 8001 --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3501 -- python3 app.py
 ```
 
 ##### Checkout Service
@@ -101,7 +139,11 @@ dapr run --app-port 8001 --app-id order-processor --resources-path ../../../reso
 ```bash
 cd ../service_invocation/python/http/checkout
 pip3 install -r requirements.txt
-dapr run  --app-id checkout --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3500 -- python3 app.py
+# The paths assume execution from service_invocation/python/http/checkout:
+dapr run  --app-id checkout \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3500 -- python3 app.py
 ```
 
 ### Expected output
@@ -159,7 +201,11 @@ Simulate the `order-processor` service recovering by restarting the application 
 ##### Order Processor Service
 
 ```bash
-dapr run --app-port 7001 --app-id order-processor --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3501 -- dotnet run
+# The paths assume execution from service_invocation/csharp/http/order-processor:
+dapr run --app-port 7001 --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3501 -- dotnet run
 ```
 
 ### Go example
@@ -167,7 +213,11 @@ dapr run --app-port 7001 --app-id order-processor --resources-path ../../../reso
 ##### Order Processor Service
 
 ```bash
-dapr run --app-port 6001 --app-id order-processor --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3501 -- go run .
+# The paths assume execution from service_invocation/go/http/order-processor:
+dapr run --app-port 6001 --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3501 -- go run .
 ```
 
 ### Java example
@@ -175,7 +225,11 @@ dapr run --app-port 6001 --app-id order-processor --resources-path ../../../reso
 ##### Order Processor Service
 
 ```bash
-dapr run --app-id order-processor --resources-path ../../../resources/ --app-port 9001 --app-protocol http --dapr-http-port 3501 -- java -jar target/OrderProcessingService-0.0.1-SNAPSHOT.jar
+# The paths assume execution from service_invocation/java/http/order-processor:
+dapr run --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-port 9001 --app-protocol http --dapr-http-port 3501 -- java -jar target/OrderProcessingService-0.0.1-SNAPSHOT.jar
 ```
 
 ### JavaScript example
@@ -183,7 +237,11 @@ dapr run --app-id order-processor --resources-path ../../../resources/ --app-por
 ##### Order Processor Service
 
 ```bash
-dapr run --app-port 5001 --app-id order-processor --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3501 -- npm start
+# The paths assume execution from service_invocation/javascript/http/order-processor:
+dapr run --app-port 5001 --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3501 -- npm start
 ```
 
 ### Python example
@@ -191,7 +249,11 @@ dapr run --app-port 5001 --app-id order-processor --resources-path ../../../reso
 ##### Order Processor Service:
 
 ```bash
-dapr run --app-port 8001 --app-id order-processor --resources-path ../../../resources/ --app-protocol http --dapr-http-port 3501 -- python3 app.py
+# The paths assume execution from service_invocation/python/http/order-processor:
+dapr run --app-port 8001 --app-id order-processor \
+  --resources-path ../../../resources/ \
+  --resources-path ../../../../resiliency/components/ \
+  --app-protocol http --dapr-http-port 3501 -- python3 app.py
 ```
 
 ### Observe orders have resumed sequentially:

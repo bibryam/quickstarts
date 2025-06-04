@@ -13,31 +13,19 @@ This quickstart includes two apps:
 
 This section shows how to run both applications at once using [multi-app run template files](https://docs.dapr.io/developing-applications/local-development/multi-app-dapr-run/multi-app-overview/) with `dapr run -f .`. This enables to you test the interactions between multiple applications and will `schedule`, `run`, `get`, and `delete` jobs within a single process.
 
-1. Install dependencies:
+1. Install dependencies for both `job-service` and `job-scheduler`. These commands should be run from the current directory (`jobs/javascript/http/`):
 
 <!-- STEP
-name: Install Node dependencies for job-service
+name: Install Node dependencies
 -->
-
 ```bash
-cd ./job-service
-npm install
+npm install --prefix ./job-service
+npm install --prefix ./job-scheduler
 ```
 
 <!-- END_STEP -->
 
-<!-- STEP
-name: Install Node dependencies for job-scheduler
--->
-
-```bash
-cd ./job-scheduler
-npm install
-```
-
-<!-- END_STEP -->
-
-2. Open a new terminal window and run the multi app run template:
+2. Then, also from the current directory (`jobs/javascript/http/`), open a new terminal window and run the multi app run template:
 
 <!-- STEP
 name: Run multi app run template
@@ -107,8 +95,19 @@ dapr stop -f .
 
 ### Schedule Jobs
 
-1. Open a terminal and run the `job-service` app:
-
+1. Open a terminal, navigate to the `job-service` directory (e.g. `cd ./job-service`), and run the `job-service` app with Dapr:
+<!-- STEP
+name: Run job-service individually
+working_dir: ./job-service
+expected_stdout_lines:
+  - "Registered job handler for: r2-d2" # Or similar app log
+  - "Registered job handler for: c-3po"
+expected_stderr_lines:
+output_match_mode: substring
+match_order: none
+background: true
+sleep: 5
+-->
 ```bash
 dapr run --app-id job-service --app-port 6200 --dapr-http-port 6280 -- npm run start
 ```
@@ -121,6 +120,7 @@ curl -X POST \
   -H "Content-Type: application/json" \
   -d '{
         "data": {
+          "@type": "type.googleapis.com/google.protobuf.StringValue",
           "value": "R2-D2:Oil Change"
         },
         "dueTime": "2s"
@@ -130,9 +130,9 @@ curl -X POST \
 Back at the `job-service` app terminal window, the output should be:
 
 ```text
-== APP - job-app == Received job request...
-== APP - job-app == Starting droid: R2-D2
-== APP - job-app == Executing maintenance job: Oil Change
+== APP - job-service == Received job request...
+== APP - job-service == Starting droid: R2-D2
+== APP - job-service == Executing maintenance job: Oil Change
 ```
 
 3. On the same terminal window, schedule the `C-3PO` Job using the Jobs API.
@@ -143,6 +143,7 @@ curl -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "data": {
+      "@type": "type.googleapis.com/google.protobuf.StringValue",
       "value": "C-3PO:Limb Calibration"
     },
     "dueTime": "30s"

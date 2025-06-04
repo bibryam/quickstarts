@@ -37,12 +37,13 @@ docker exec dapr_redis redis-cli MSET orderId1 "101" orderId2 "102"
 
 ## Build the Java file
 
+Navigate to the `order-processor` directory and run the following command to build the Java file:
 <!-- STEP
 name: Build Java file
+working_dir: ./order-processor
 -->
 
 ```bash
-cd ./order-processor
 mvn clean install
 ```
 
@@ -50,7 +51,7 @@ mvn clean install
 
 ## Run order-processor
 
-1. Navigate to `order-processor` directory.
+Once the build is complete (user should still be in the `order-processor` directory):
 2. Run the service app with Dapr.
 
 <!-- STEP
@@ -68,7 +69,6 @@ sleep: 120
 -->
 
 ```bash
-cd ./order-processor
 dapr run --app-id order-processor --app-port 6001 --resources-path ../../../components -- java -jar target/OrderProcessingService-0.0.1-SNAPSHOT.jar
 ```
 

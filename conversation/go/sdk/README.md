@@ -59,3 +59,44 @@ dapr stop -f .
 ```
 
 <!-- END_STEP -->
+
+## Run the app individually
+
+1. Navigate to the `./conversation` directory (e.g., `cd ./conversation`). If you haven't already, build the Go module:
+<!-- STEP
+name: Build go app sdk
+working_dir: ./conversation
+-->
+```bash
+go build .
+```
+<!-- END_STEP -->
+
+2. Run the Dapr process alongside the application:
+<!-- STEP
+name: Run go app sdk
+working_dir: ./conversation
+expected_stdout_lines:
+  - '== APP == Input sent: What is dapr?'
+  - '== APP == Output response: What is dapr?'
+expected_stderr_lines:
+output_match_mode: substring
+match_order: none
+background: true
+sleep: 15
+timeout_seconds: 30
+-->
+```bash
+dapr run --app-id conversation --resources-path ../../../components/ --app-port 8081 --dapr-http-port 3508 -- go run .
+```
+<!-- END_STEP -->
+
+The terminal console output should look similar to this, where the app sends an input and the mock LLM echoes it.
+
+<!-- STEP
+name: Stop go app sdk
+-->
+```bash
+dapr stop --app-id conversation
+```
+<!-- END_STEP -->

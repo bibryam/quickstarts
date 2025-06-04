@@ -49,7 +49,6 @@ sleep: 120
 -->
 
 ```bash
-cd ./order-processor
 dapr run --app-id order-processor --app-port 6001 --resources-path ../../../components -- go run .
 ```
 
