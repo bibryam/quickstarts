@@ -26,7 +26,6 @@ base_url = os.getenv('BASE_URL', 'http://localhost') + ':' + os.getenv(
 CONVERSATION_COMPONENT_NAME = 'echo'
 
 input = {
-    'name': 'anthropic',
     'inputs': [{
         'messages': [{
             'of_user': {
@@ -66,7 +65,6 @@ except (KeyError, IndexError) as e:
         logging.info(f'No outputs found in response')
 
 tool_call_input = {
-    'name': 'anthropic',
     'inputs': [{
         'messages': [{
             'of_user': {
@@ -91,7 +89,7 @@ tool_call_input = {
         'api_key': 'test-key',
         'version': '1.0'
     },
-    'scrubPii': False,
+    'scrubPII': False,
     'temperature': 0.7,
     'tools': [{
         'function': {
